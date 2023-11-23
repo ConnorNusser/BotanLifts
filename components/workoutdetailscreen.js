@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { View, Text, Modal, StyleSheet, ScrollView } from 'react-native';
 import { ButtonGroup } from '@rneui/themed'
 
@@ -8,7 +8,6 @@ const WorkoutDetailScreen = ({ route }) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
   return (
     <View>
-        <View style={styles.container}>
         <ButtonGroup
         buttons={daysOfWeek}
         selectedIndex={selectedIndex}
@@ -17,7 +16,6 @@ const WorkoutDetailScreen = ({ route }) => {
         }}
         containerStyle={{ marginBottom: 20 }}
         />
-      </View>
       <Text>Workout Number: {workoutNumber}</Text>
       <Text>Content: {content}</Text>
       {/* ... Other workout details */}

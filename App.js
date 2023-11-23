@@ -1,15 +1,16 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, DarkTheme, DefaultTheme } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { useColorScheme } from 'react-native';
 
 import WorkoutScreen from './components/workoutscreen.js';
 import Settings from './components/settings.js';
 import Home from './components/home.js';
 import WorkoutDetailScreen from './components/workoutdetailscreen.js';
 import WorkoutList from './components/workoutlist.js';
-import Profile from './components/profile.js'; // Add your Profile component import
+import Profile from './components/profile.js';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -39,8 +40,11 @@ const ProfileNavigator = () => (
 );
 
 const App = () => {
+  const colorScheme = useColorScheme();
+  const theme = colorScheme === 'dark' ? DarkTheme : DarkTheme;
+
   return (
-    <NavigationContainer>
+    <NavigationContainer theme={theme}>
       <Tab.Navigator
         screenOptions={{
           headerShown: false,
