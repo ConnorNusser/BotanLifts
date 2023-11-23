@@ -3,7 +3,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer, DarkTheme, DefaultTheme } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { useColorScheme } from 'react-native';
+import { useColorScheme, TouchableOpacity, Text} from 'react-native';
 
 import WorkoutScreen from './components/workoutscreen.js';
 import Settings from './components/settings.js';
@@ -15,12 +15,31 @@ import Profile from './components/profile.js';
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
-const WorkoutStack = () => (
-  <Stack.Navigator>
-    <Stack.Screen name="Workouts" component={WorkoutScreen} />
-    <Stack.Screen name="WorkoutDetail" component={WorkoutDetailScreen} />
-  </Stack.Navigator>
-);
+const WorkoutStack = () => {
+  const colorScheme = useColorScheme();
+  const arrowColor = colorScheme === 'dark' ? '#fff' : '#000'; // Set arrow color based on theme
+
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="Workouts"
+        component={WorkoutScreen}
+      />
+      <Stack.Screen
+        name="WorkoutDetail"
+        component={WorkoutDetailScreen}
+        options={({ navigation }) => ({
+          headerTitle: 'Details',
+          headerLeft: () => (
+            <TouchableOpacity onPress={() => navigation.goBack()}>
+              <MaterialCommunityIcons name="arrow-left" size={24} color={arrowColor} style={{ marginLeft: 15 }} />
+            </TouchableOpacity>
+          ),
+        })}
+      />
+    </Stack.Navigator>
+  );
+};
 
 const ProfileStack = createStackNavigator();
 
@@ -41,7 +60,7 @@ const ProfileNavigator = () => (
 
 const App = () => {
   const colorScheme = useColorScheme();
-  const theme = colorScheme === 'dark' ? DarkTheme : DarkTheme;
+  const theme = colorScheme === 'dark' ? DarkTheme : DefaultTheme;
 
   return (
     <NavigationContainer theme={theme}>

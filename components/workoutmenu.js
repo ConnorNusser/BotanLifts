@@ -2,7 +2,8 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableNativeFeedback } from 'react-native';
 import { Card, Title, Paragraph, ProgressBar } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
-const WorkoutMenu = ({ workoutid, workoutNumber, content }) => {
+
+const WorkoutMenu = ({ workoutNumber, content, showProgress }) => {
   const navigation = useNavigation();
 
   const navigateToWorkoutDetail = () => {
@@ -19,12 +20,12 @@ const WorkoutMenu = ({ workoutid, workoutNumber, content }) => {
   return (
     <TouchableNativeFeedback onPress={navigateToWorkoutDetail}>
       <View style={styles.cardContainer}>
-        <Card>
+        <Card style={styles.card}>
           <Card.Content>
-            <Title>Workout: {workoutNumber}</Title>
+            <Title>Week: {workoutNumber}</Title>
             <Text style={{ fontSize: 12, color: 'gray' }}>{formattedDate}</Text>
-            <Paragraph>Progress</Paragraph>
-            <ProgressBar progress={0.5} color={'blue'} />
+            {showProgress && <Paragraph>Progress</Paragraph>}
+            {showProgress && <ProgressBar progress={0.5} color={'blue'} />}
           </Card.Content>
         </Card>
       </View>
@@ -34,9 +35,10 @@ const WorkoutMenu = ({ workoutid, workoutNumber, content }) => {
 
 const styles = StyleSheet.create({
   cardContainer: {
-    padding: 10,
-    borderBottomColor: '#ccc',
     width: '100%',
+  },
+  card: {
+    borderRadius: 0, // Set border radius to 0 to remove rounded corners
   },
 });
 
