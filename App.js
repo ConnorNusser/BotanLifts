@@ -6,11 +6,11 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import { useColorScheme, TouchableOpacity, Text} from 'react-native';
 
 import WorkoutScreen from './components/workoutscreen.js';
-import Settings from './components/settings.js';
+import Settings from './components/screens/settings.js';
 import Home from './components/home.js';
 import WorkoutDetailScreen from './components/workoutdetailscreen.js';
-import WorkoutList from './components/workoutlist.js';
-import Profile from './components/profile.js';
+import WorkoutList from './components/screens/workoutlist.js';
+import Profile from './components/screens/profile.js';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();

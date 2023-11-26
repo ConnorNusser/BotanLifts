@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { Avatar, Card } from 'react-native-paper';
 import { Icon, Button } from 'react-native-elements';
 import { useNavigation } from '@react-navigation/native';
-import LiftingChart from './liftingchart.js';
+import LiftingChart from '../util/liftingchart.js';
 
 const Profile = () => {
   const navigation = useNavigation();
