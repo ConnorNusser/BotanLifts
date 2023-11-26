@@ -5,7 +5,7 @@ import  ExerciseSection from './exercisesection'
 const WorkoutDetailScreen = ({ route }) => {
   const { workoutNumber, content } = route.params;
   const daysOfWeek = ['Sa', 'M', 'T', 'W', 'T', 'F', 'Su'];
-  const [selectedIndex, setSelectedIndex] = useState();
+  const [selectedIndex, setSelectedIndex] = useState(0);
   return (
     <View>
         <ButtonGroup
@@ -16,7 +16,7 @@ const WorkoutDetailScreen = ({ route }) => {
         }}
         containerStyle={{ marginBottom: 20 }}
         />
-      <ExerciseSection daysOfWeek= {daysOfWeek[selectedIndex]}/>
+      <ExerciseSection dayOfWeek= {daysOfWeek[selectedIndex]}/>
     </View>
   );
 };
