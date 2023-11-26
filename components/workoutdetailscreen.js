@@ -4,8 +4,8 @@ import { ButtonGroup } from '@rneui/themed'
 import  ExerciseSection from './exercisesection'
 const WorkoutDetailScreen = ({ route }) => {
   const { workoutNumber, content } = route.params;
-  const daysOfWeek = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
-  const [selectedIndex, setSelectedIndex] = useState(0);
+  const daysOfWeek = ['Sa', 'M', 'T', 'W', 'T', 'F', 'Su'];
+  const [selectedIndex, setSelectedIndex] = useState();
   return (
     <View>
         <ButtonGroup
@@ -16,7 +16,7 @@ const WorkoutDetailScreen = ({ route }) => {
         }}
         containerStyle={{ marginBottom: 20 }}
         />
-      <ExerciseSection />
+      <ExerciseSection daysOfWeek= {daysOfWeek[selectedIndex]}/>
     </View>
   );
 };

@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Modal, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { Card } from 'react-native-paper';
 import { ListItem } from 'react-native-elements';
 import { Button } from '@rneui/themed';
 import { Text } from '@rneui/themed';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const ExerciseSection = () => {
+const ExerciseSection = ({dayOfWeek}) => {
   const [exerciseModalVisible, setExerciseModalVisible] = useState(false);
   const [selectedExercises, setSelectedExercises] = useState([]);
 
@@ -20,6 +21,23 @@ const ExerciseSection = () => {
   const handleCloseModal = () => {
     setExerciseModalVisible(false);
   };
+
+  useEffect(() => {
+    const loadSelectedWorkouts = async () => {
+      try {
+        // Load selected workouts for the specific day from AsyncStorage
+        const savedSelectedWorkouts = await AsyncStorage.getItem(`selectedWorkouts_${dayOfWeek}`);
+        if (savedSelectedWorkouts !== null) {
+          setSelectedExercises(JSON.parse(savedSelectedWorkouts));
+        }
+      } catch (error) {
+        console.error('Error loading selected workouts:', error);
+      }
+    };
+
+    loadSelectedWorkouts();
+  }, [dayOfWeek]);
+
 
   const ExerciseModal = ({ visible, onSave, onClose }) => {
     const [selectedExercises, setSelectedExercises] = useState([]);
@@ -52,6 +70,7 @@ const ExerciseSection = () => {
                     ? selectedExercises.filter((ex) => ex !== exercise)
                     : [...selectedExercises, exercise];
                   setSelectedExercises(newSelectedExercises);
+                  AsyncStorage.setItem(`selectedWorkouts_${dayOfWeek}`, JSON.stringify(newSelectedExercises));
                 }}
               >
                 <ListItem bottomDivider containerStyle={[styles.listItem, selectedExercises.includes(exercise) && styles.selectedItem]}>
