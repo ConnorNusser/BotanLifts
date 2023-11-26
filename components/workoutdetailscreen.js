@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import { View, Text, Modal, StyleSheet, ScrollView } from 'react-native';
 import { ButtonGroup } from '@rneui/themed'
-
+import  ExerciseSection from './exercisesection'
 const WorkoutDetailScreen = ({ route }) => {
   const { workoutNumber, content } = route.params;
   const daysOfWeek = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
@@ -16,9 +16,7 @@ const WorkoutDetailScreen = ({ route }) => {
         }}
         containerStyle={{ marginBottom: 20 }}
         />
-      <Text>Workout Number: {workoutNumber}</Text>
-      <Text>Content: {content}</Text>
-      {/* ... Other workout details */}
+      <ExerciseSection />
     </View>
   );
 };
