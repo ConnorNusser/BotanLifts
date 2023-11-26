@@ -4,7 +4,7 @@ import { Card, Title, Paragraph, ProgressBar } from 'react-native-paper';
 import Swipeable from 'react-native-swipeable';
 import { useNavigation } from '@react-navigation/native';
 
-const WorkoutMenu = ({ workoutNumber, content, showProgress, onDelete }) => {
+const WorkoutMenu = ({ workoutNumber, content, showProgress, onDeleteCallback }) => {
   const navigation = useNavigation();
 
   const navigateToWorkoutDetail = () => {
@@ -18,12 +18,12 @@ const WorkoutMenu = ({ workoutNumber, content, showProgress, onDelete }) => {
   };
   const formattedDate = formatDate(today);
 
-  const deleteItem = () => {
-    onDelete(); // Call the callback to delete the item
+  const deleteWorkout = () => {
+    onDeleteCallback(); // Call the callback to delete the item
   };
 
   return (
-    <Swipeable rightButtons={[<DeleteButton onDelete={deleteItem} />]} useNativeDriver={false}>
+    <Swipeable rightButtons={[<DeleteButton onDeleteProp={deleteWorkout} />]} useNativeDriver={false}>
       <TouchableNativeFeedback onPress={navigateToWorkoutDetail}>
         <View style={styles.cardContainer}>
           <Card style={styles.card}>
@@ -41,9 +41,9 @@ const WorkoutMenu = ({ workoutNumber, content, showProgress, onDelete }) => {
 };
 
 // Separate component for delete button in the swipe action
-const DeleteButton = ({ onDelete }) => (
+const DeleteButton = ({ onDeleteProp }) => (
   <View style={styles.deleteButton}>
-    <TouchableNativeFeedback onPress={onDelete}>
+    <TouchableNativeFeedback onPress={onDeleteProp}>
       <Text style={{ color: 'white' }}>Delete</Text>
     </TouchableNativeFeedback>
   </View>
