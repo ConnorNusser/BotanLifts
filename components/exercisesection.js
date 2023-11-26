@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { View, Text, Modal, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Modal, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { Card } from 'react-native-paper';
 import { ListItem } from 'react-native-elements';
 import { Button } from '@rneui/themed';
+import { Text } from '@rneui/themed';
 
 const ExerciseSection = () => {
   const [exerciseModalVisible, setExerciseModalVisible] = useState(false);
@@ -41,32 +42,30 @@ const ExerciseSection = () => {
     return (
       <Modal visible={visible} animationType="slide">
         <View style={styles.modalContainer}>
+        <Text style={styles.title} h1>Add Exercise</Text>
           <ScrollView contentContainerStyle={styles.scrollView}>
             {exercises.map((exercise, index) => (
               <TouchableOpacity
                 key={index}
                 onPress={() => {
-                  if (selectedExercises.includes(exercise)) {
-                    setSelectedExercises(selectedExercises.filter((ex) => ex !== exercise));
-                  } else {
-                    setSelectedExercises([...selectedExercises, exercise]);
-                  }
+                  const newSelectedExercises = selectedExercises.includes(exercise)
+                    ? selectedExercises.filter((ex) => ex !== exercise)
+                    : [...selectedExercises, exercise];
+                  setSelectedExercises(newSelectedExercises);
                 }}
               >
-                <ListItem bottomDivider>
+                <ListItem bottomDivider containerStyle={[styles.listItem, selectedExercises.includes(exercise) && styles.selectedItem]}>
                   <ListItem.Content>
-                    <ListItem.Subtitle style={[styles.exerciseItem, selectedExercises.includes(exercise) && styles.selectedItem]}>
-                      {exercise}
-                    </ListItem.Subtitle>
+                    <ListItem.Subtitle>{exercise}</ListItem.Subtitle>
                   </ListItem.Content>
                 </ListItem>
               </TouchableOpacity>
             ))}
           </ScrollView>
           <View style={styles.buttonContainer}>
-          <Button onPress={onClose}>Cancel</Button>
-        <Button onPress={handleSave}>Save</Button>
-      </View>
+            <Button onPress={onClose} title="Cancel" buttonStyle={{ backgroundColor: 'black' }} color="black" />
+            <Button onPress={handleSave} title="Save" buttonStyle={{ backgroundColor: 'black' }} color="black" />
+          </View>
         </View>
       </Modal>
     );
@@ -75,10 +74,9 @@ const ExerciseSection = () => {
   return (
     <View style={styles.container}>
       <View style={styles.buttonRow}>
-        <Button onPress={handleOpenModal} buttonStyle={{
-                backgroundColor: 'black',
-                borderRadius: 5,
-              }}>Add Exercise</Button>
+        <Button onPress={handleOpenModal} buttonStyle={{ backgroundColor: 'black', borderRadius: 5 }}>
+          Add Exercise
+        </Button>
       </View>
 
       {selectedExercises.map((exercise, index) => (
@@ -119,25 +117,28 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     paddingTop: '20%',
   },
-  exerciseItem: {
-    padding: 10,
+  listItem: {
+    paddingVertical: 10,
     borderBottomWidth: 1,
     borderBottomColor: '#ccc',
-    textAlign: 'center',
+    backgroundColor: 'white',
   },
   selectedItem: {
     backgroundColor: 'lightblue',
-  },
-  cardModal: {
-    marginHorizontal: 5,
-    borderRadius: 0,
-    marginTop: 10,
   },
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'space-around',
     marginVertical: 20,
   },
+  scrollView: {
+    flexGrow: 1,
+    paddingTop: '10%',
+  },
+  title: {
+    paddingTop: '40%',
+    paddingLeft: 20
+  }
 });
 
 export default ExerciseSection;
