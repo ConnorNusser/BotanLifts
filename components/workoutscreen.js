@@ -72,7 +72,7 @@ const HomeScreen = () => {
                 workoutNumber={workout.workoutNumber}
                 content={workout.content}
                 showProgress={isLastItem}
-                onDelete={() => deleteWorkout(workout.id)}
+                onDeleteCallback={() => deleteWorkout(workout.id)}
               />
             </View>
           );

@@ -80,23 +80,13 @@ const App = () => {
             ),
           }}
         />
-        <Tab.Screen
+         <Tab.Screen
           name="Home"
           component={Home}
           options={{
             tabBarLabel: 'Home',
             tabBarIcon: ({ color, size }) => (
               <MaterialCommunityIcons name="home" color={color} size={size} />
-            ),
-          }}
-        />
-        <Tab.Screen
-          name="Workout List"
-          component={WorkoutList}
-          options={{
-            tabBarLabel: 'Workout List',
-            tabBarIcon: ({ color, size }) => (
-              <MaterialCommunityIcons name="format-list-bulleted" color={color} size={size} />
             ),
           }}
         />
@@ -107,3 +97,17 @@ const App = () => {
 };
 
 export default App;
+
+
+/*
+  <Tab.Screen
+    name="Workout List"
+    component={WorkoutList}
+    options={{
+      tabBarLabel: 'Workout List',
+      tabBarIcon: ({ color, size }) => (
+        <MaterialCommunityIcons name="format-list-bulleted" color={color} size={size} />
+      ),
+    }}
+  />
+*/
