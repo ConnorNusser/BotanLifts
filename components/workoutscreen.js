@@ -43,6 +43,13 @@ const HomeScreen = () => {
     saveComponentsToStorage(updatedWorkouts);
   };
 
+  const deleteWorkout = (id) => {
+    // Remove the workout item based on its ID
+    const updatedWorkouts = workouts.filter((workout) => workout.id !== id);
+    setWorkouts(updatedWorkouts);
+    saveComponentsToStorage(updatedWorkouts);
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.topBar}>
@@ -65,6 +72,7 @@ const HomeScreen = () => {
                 workoutNumber={workout.workoutNumber}
                 content={workout.content}
                 showProgress={isLastItem}
+                onDelete={() => deleteWorkout(workout.id)}
               />
             </View>
           );

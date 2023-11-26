@@ -7,7 +7,6 @@ const WorkoutList = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.text}>Welcome to Home Screen!</Text>
-      {/* Add your content here */}
     </View>
   );
 };
