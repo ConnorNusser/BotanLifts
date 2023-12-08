@@ -8,7 +8,7 @@ const WorkoutMenu = ({ workoutNumber, content, showProgress, onDeleteCallback })
   const navigation = useNavigation();
 
   const navigateToWorkoutDetail = () => {
-    navigation.navigate('WorkoutDetail', { workoutNumber, content });
+    navigation.navigate('WorkoutDetailScreen', { workoutNumber: workoutNumber, content: content });
   };
 
   const today = new Date();

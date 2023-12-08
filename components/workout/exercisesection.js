@@ -5,10 +5,18 @@ import { ListItem } from 'react-native-elements';
 import { Button } from '@rneui/themed';
 import { Text } from '@rneui/themed';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigation } from '@react-navigation/native';
 
 const ExerciseSection = ({dayOfWeek}) => {
   const [exerciseModalVisible, setExerciseModalVisible] = useState(false);
   const [selectedExercises, setSelectedExercises] = useState([]);
+  const navigation = useNavigation();
+
+  const navigateToSpecifiedExercise = (exercise) => {
+    navigation.navigate('SpecifiedWorkout', { 
+      exercise: exercise, 
+      dow: dayOfWeek});
+  };
 
   const handleSaveExercises = (exercises) => {
     setSelectedExercises(exercises);
@@ -99,7 +107,7 @@ const ExerciseSection = ({dayOfWeek}) => {
       </View>
 
       {selectedExercises.map((exercise, index) => (
-        <TouchableOpacity key={index}>
+        <TouchableOpacity key={index} onPress={navigateToSpecifiedExercise(exercise)}>
           <Card style={styles.card}>
             <Card.Content>
               <Text>{exercise}</Text>
