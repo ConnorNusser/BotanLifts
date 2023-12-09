@@ -2,8 +2,9 @@ import React, {useState} from 'react';
 import { View, Text, Modal, StyleSheet, ScrollView } from 'react-native';
 import { ButtonGroup } from '@rneui/themed'
 import  ExerciseSection from './workout/exercisesection.js'
-const WorkoutDetailScreen = ({ workoutNumber, content }) => {
-console.log(workoutNumber);
+const WorkoutDetailScreen = ({ route }) => {
+  const {id, workoutNumber, content} = route.params;
+  console.log(id);
   const daysOfWeek = ['Sa', 'M', 'T', 'W', 'T', 'F', 'Su'];
   const [selectedIndex, setSelectedIndex] = useState(0);
   return (
@@ -16,7 +17,7 @@ console.log(workoutNumber);
         }}
         containerStyle={{ marginBottom: 20 }}
         />
-      <ExerciseSection dayOfWeek= {daysOfWeek[selectedIndex]}/>
+      <ExerciseSection id={id} dayOfWeek={daysOfWeek[selectedIndex]}/>
     </View>
   );
 };

@@ -4,11 +4,11 @@ import { Card, Title, Paragraph, ProgressBar } from 'react-native-paper';
 import Swipeable from 'react-native-swipeable';
 import { useNavigation } from '@react-navigation/native';
 
-const WorkoutMenu = ({ workoutNumber, content, showProgress, onDeleteCallback }) => {
+const WorkoutMenu = ({ id, workoutNumber, content, showProgress, onDeleteCallback }) => {
   const navigation = useNavigation();
 
   const navigateToWorkoutDetail = () => {
-    navigation.navigate('WorkoutDetailScreen', { workoutNumber: workoutNumber, content: content });
+    navigation.navigate('WorkoutDetailScreen', { id: id, workoutNumber: workoutNumber, content: content });
   };
 
   const today = new Date();

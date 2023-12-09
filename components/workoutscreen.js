@@ -69,6 +69,7 @@ const HomeScreen = () => {
           return (
             <View style={[styles.scrollViewItem, isLastItem && styles.lastItem]} key={workout.id}>
               <WorkoutMenu
+                id = {workout.id}
                 workoutNumber={workout.workoutNumber}
                 content={workout.content}
                 showProgress={isLastItem}

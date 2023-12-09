@@ -22,37 +22,30 @@ const WorkoutStack = () => {
 
   return (
     <Stack.Navigator>
-    <Stack.Screen
-      name="Workouts"
-      component={WorkoutScreen}
-    />
-    <Stack.Screen
-      name="WorkoutDetailScreen"
-      options={({ navigation }) => ({
-        headerTitle: 'Details',
-        headerLeft: () => (
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <MaterialCommunityIcons name="arrow-left" size={24} color={arrowColor} style={{ marginLeft: 15 }} />
-          </TouchableOpacity>
-        ),
-      })}
-    >
-      {() => (
-        <Stack.Navigator>
-          <Stack.Screen 
-            name="WorkoutDetailScreen"
-            component={WorkoutDetailScreen}
-          />
-          <Stack.Screen 
-            name="SpecifiedWorkout"
-            component={SpecifiedWorkout}
-          />
-        </Stack.Navigator>
-      )}
-    </Stack.Screen>
-  </Stack.Navigator>
+      <Stack.Screen
+        name="Workouts"
+        component={WorkoutScreen}
+      />
+      <Stack.Screen
+        name="WorkoutDetailScreen"
+        component={WorkoutDetailScreen}
+        options={({ navigation }) => ({
+          headerTitle: 'Details',
+          headerLeft: () => (
+            <TouchableOpacity onPress={() => navigation.goBack()}>
+              <MaterialCommunityIcons name="arrow-left" size={24} color={arrowColor} style={{ marginLeft: 15 }} />
+            </TouchableOpacity>
+          ),
+        })}
+      />
+      <Stack.Screen 
+        name="SpecifiedWorkout"
+        component={SpecifiedWorkout}
+      />
+    </Stack.Navigator>
   );
 };
+
 
 const ProfileStack = createStackNavigator();
 

@@ -1,21 +1,22 @@
+// ExerciseSection.js
+
 import React, { useState, useEffect } from 'react';
-import { View, Modal, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Modal, StyleSheet, ScrollView, TouchableOpacity, Dimensions, Text } from 'react-native';
 import { Card } from 'react-native-paper';
-import { ListItem } from 'react-native-elements';
 import { Button } from '@rneui/themed';
-import { Text } from '@rneui/themed';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
+import SpecifiedWorkout from './specifiedworkout'; // Import the SpecifiedWorkout component
 
-const ExerciseSection = ({dayOfWeek}) => {
+const ExerciseSection = ({ id, dayOfWeek }) => {
+  console.log(id);
   const [exerciseModalVisible, setExerciseModalVisible] = useState(false);
   const [selectedExercises, setSelectedExercises] = useState([]);
-  const navigation = useNavigation();
+  const [selectedExercise, setSelectedExercise] = useState(null); // Track selected exercise for modal
 
   const navigateToSpecifiedExercise = (exercise) => {
-    navigation.navigate('SpecifiedWorkout', { 
-      exercise: exercise, 
-      dow: dayOfWeek});
+    setSelectedExercise(exercise); // Set the selected exercise for modal
+    setExerciseModalVisible(true); // Open the modal
   };
 
   const handleSaveExercises = (exercises) => {
@@ -28,6 +29,7 @@ const ExerciseSection = ({dayOfWeek}) => {
 
   const handleCloseModal = () => {
     setExerciseModalVisible(false);
+    setSelectedExercise(null); // Clear the selected exercise when closing the modal
   };
 
   useEffect(() => {
@@ -45,8 +47,6 @@ const ExerciseSection = ({dayOfWeek}) => {
 
     loadSelectedWorkouts();
   }, [dayOfWeek]);
-
-
   const ExerciseModal = ({ visible, onSave, onClose }) => {
     const [selectedExercises, setSelectedExercises] = useState([]);
     const exercises = [
@@ -78,7 +78,7 @@ const ExerciseSection = ({dayOfWeek}) => {
                     ? selectedExercises.filter((ex) => ex !== exercise)
                     : [...selectedExercises, exercise];
                   setSelectedExercises(newSelectedExercises);
-                  AsyncStorage.setItem(`selectedWorkouts_${dayOfWeek}`, JSON.stringify(newSelectedExercises));
+                  AsyncStorage.setItem(`selectedWorkouts_${id}_${dayOfWeek}`, JSON.stringify(newSelectedExercises));
                 }}
               >
                 <ListItem bottomDivider containerStyle={[styles.listItem, selectedExercises.includes(exercise) && styles.selectedItem]}>
@@ -97,7 +97,7 @@ const ExerciseSection = ({dayOfWeek}) => {
       </Modal>
     );
   };
-
+  
   return (
     <View style={styles.container}>
       <View style={styles.buttonRow}>
@@ -106,8 +106,9 @@ const ExerciseSection = ({dayOfWeek}) => {
         </Button>
       </View>
 
+      {/* Render selected exercises as cards */}
       {selectedExercises.map((exercise, index) => (
-        <TouchableOpacity key={index} onPress={navigateToSpecifiedExercise(exercise)}>
+        <TouchableOpacity key={index} onPress={() => navigateToSpecifiedExercise(exercise)}>
           <Card style={styles.card}>
             <Card.Content>
               <Text>{exercise}</Text>
@@ -116,56 +117,49 @@ const ExerciseSection = ({dayOfWeek}) => {
         </TouchableOpacity>
       ))}
 
-      <ExerciseModal
-        visible={exerciseModalVisible}
-        onSave={handleSaveExercises}
-        onClose={handleCloseModal}
-      />
+      {/* Modal for specified workout */}
+      <Modal visible={exerciseModalVisible} animationType="slide" transparent={true}>
+        <TouchableOpacity style={styles.modalBackground} onPress={handleCloseModal}>
+          <View style={styles.modalContainer}>
+            {/* Pass the route params to SpecifiedWorkout */}
+            {selectedExercise && (
+              <SpecifiedWorkout
+                exercise={selectedExercise}
+                dow={dayOfWeek}
+                onClose={handleCloseModal} // Close the modal on SpecifiedWorkout's close action
+              />
+            )}
+          </View>
+        </TouchableOpacity>
+      </Modal>
     </View>
   );
 };
 
+const windowHeight = Dimensions.get('window').height;
+
 const styles = StyleSheet.create({
   container: {
-    padding: 20,
+    // Your container styles
   },
   buttonRow: {
-    marginBottom: 10,
-  },
-  exerciseButton: {
-    width: '100%',
-    maxWidth: 200,
+    // Your button row styles
   },
   card: {
-    marginHorizontal: 5,
-    marginTop: 10,
+    // Your card styles
   },
-  scrollView: {
-    flexGrow: 1,
-    paddingTop: '20%',
+  modalBackground: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'flex-end', // Align to the bottom
   },
-  listItem: {
-    paddingVertical: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
+  modalContainer: {
+    height: windowHeight * 0.8, // Take 80% of the screen's height
     backgroundColor: 'white',
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    overflow: 'hidden',
   },
-  selectedItem: {
-    backgroundColor: 'lightblue',
-  },
-  buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    marginVertical: 20,
-  },
-  scrollView: {
-    flexGrow: 1,
-    paddingTop: '10%',
-  },
-  title: {
-    paddingTop: '40%',
-    paddingLeft: 20
-  }
 });
 
 export default ExerciseSection;
