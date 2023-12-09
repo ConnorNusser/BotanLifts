@@ -8,10 +8,10 @@ import { useColorScheme, TouchableOpacity, Text} from 'react-native';
 import WorkoutScreen from './components/workoutscreen.js';
 import Settings from './components/screens/settings.js';
 import Home from './components/home.js';
-import WorkoutDetailScreen from './components/workoutdetailscreen.js';
+import WorkoutDetailScreen from './components/workout/workoutdetailscreen.js';
 import WorkoutList from './components/screens/workoutlist.js';
 import Profile from './components/screens/profile.js';
-import SpecifiedWorkout from './components/workout/specifiedworkout.js';
+import SpecifiedWorkout from './components/workout/modals/specifiedworkout.js';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();

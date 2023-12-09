@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import { View, Text, Modal, StyleSheet, ScrollView } from 'react-native';
 import { ButtonGroup } from '@rneui/themed'
-import  ExerciseSection from './workout/exercisesection.js'
+import  ExerciseSection from './exercisesection.js'
 const WorkoutDetailScreen = ({ route }) => {
   const {id, workoutNumber, content} = route.params;
   console.log(id);

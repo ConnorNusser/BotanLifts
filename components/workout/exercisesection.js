@@ -6,10 +6,11 @@ import { Card } from 'react-native-paper';
 import { Button } from '@rneui/themed';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
-import SpecifiedWorkout from './specifiedworkout'; // Import the SpecifiedWorkout component
+import SpecifiedWorkout from './modals/specifiedworkout'; // Import the SpecifiedWorkout component
+import { exerciseList } from '../constants/exerciselist';
+import { ListItem } from 'react-native-elements'; // Example import statement for React Native Elements
 
 const ExerciseSection = ({ id, dayOfWeek }) => {
-  console.log(id);
   const [exerciseModalVisible, setExerciseModalVisible] = useState(false);
   const [selectedExercises, setSelectedExercises] = useState([]);
   const [selectedExercise, setSelectedExercise] = useState(null); // Track selected exercise for modal
@@ -36,7 +37,7 @@ const ExerciseSection = ({ id, dayOfWeek }) => {
     const loadSelectedWorkouts = async () => {
       try {
         // Load selected workouts for the specific day from AsyncStorage
-        const savedSelectedWorkouts = await AsyncStorage.getItem(`selectedWorkouts_${dayOfWeek}`);
+        const savedSelectedWorkouts = await AsyncStorage.getItem(`selectedWorkouts_${id}_${dayOfWeek}`);
         if (savedSelectedWorkouts !== null) {
           setSelectedExercises(JSON.parse(savedSelectedWorkouts));
         }
@@ -68,7 +69,7 @@ const ExerciseSection = ({ id, dayOfWeek }) => {
     return (
       <Modal visible={visible} animationType="slide">
         <View style={styles.modalContainer}>
-        <Text style={styles.title} h1>Add Exercise</Text>
+        <Text style={styles.title}>Add Exercise</Text>
           <ScrollView contentContainerStyle={styles.scrollView}>
             {exercises.map((exercise, index) => (
               <TouchableOpacity
@@ -117,21 +118,7 @@ const ExerciseSection = ({ id, dayOfWeek }) => {
         </TouchableOpacity>
       ))}
 
-      {/* Modal for specified workout */}
-      <Modal visible={exerciseModalVisible} animationType="slide" transparent={true}>
-        <TouchableOpacity style={styles.modalBackground} onPress={handleCloseModal}>
-          <View style={styles.modalContainer}>
-            {/* Pass the route params to SpecifiedWorkout */}
-            {selectedExercise && (
-              <SpecifiedWorkout
-                exercise={selectedExercise}
-                dow={dayOfWeek}
-                onClose={handleCloseModal} // Close the modal on SpecifiedWorkout's close action
-              />
-            )}
-          </View>
-        </TouchableOpacity>
-      </Modal>
+      <ExerciseModal />
     </View>
   );
 };
