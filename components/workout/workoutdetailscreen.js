@@ -6,7 +6,8 @@ const WorkoutDetailScreen = ({ route }) => {
   const {id, workoutNumber, content} = route.params;
   console.log(id);
   const daysOfWeek = ['Sa', 'M', 'T', 'W', 'T', 'F', 'Su'];
-  const [selectedIndex, setSelectedIndex] = useState(0);
+  const currentDayIndex = new Date().getDay();
+  const [selectedIndex, setSelectedIndex] = useState(currentDayIndex);
   return (
     <View>
         <ButtonGroup

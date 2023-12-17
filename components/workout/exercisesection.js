@@ -1,17 +1,17 @@
 // ExerciseSection.js
 
 import React, { useState, useEffect } from 'react';
-import { View, Modal, StyleSheet, ScrollView, TouchableOpacity, Dimensions, Text } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Dimensions, Text } from 'react-native';
 import { Card } from 'react-native-paper';
 import { Button } from '@rneui/themed';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useNavigation } from '@react-navigation/native';
-import SpecifiedWorkout from './modals/specifiedworkout'; // Import the SpecifiedWorkout component
-import { exerciseList } from '../constants/exerciselist';
-import { ListItem } from 'react-native-elements'; // Example import statement for React Native Elements
+import AddExerciseModal from './modals/addexercisemodal';
+import { ScrollView } from 'react-native-gesture-handler';
+import { SpecifiedWorkoutModal } from './modals/specifiedworkoutmodal';
 
 const ExerciseSection = ({ id, dayOfWeek }) => {
   const [exerciseModalVisible, setExerciseModalVisible] = useState(false);
+  const [addExerciseModalVisible, setAddExerciseModalVisible] = useState(false);
   const [selectedExercises, setSelectedExercises] = useState([]);
   const [selectedExercise, setSelectedExercise] = useState(null); // Track selected exercise for modal
 
@@ -25,13 +25,17 @@ const ExerciseSection = ({ id, dayOfWeek }) => {
   };
 
   const handleOpenModal = () => {
-    setExerciseModalVisible(true);
+    setAddExerciseModalVisible(true);
   };
 
-  const handleCloseModal = () => {
-    setExerciseModalVisible(false);
+  const handleCloseAddExerciseModal = () => {
+    setAddExerciseModalVisible(false);
     setSelectedExercise(null); // Clear the selected exercise when closing the modal
   };
+
+  const handleCloseSpecifiedExerciseWorkoutModal = () => {
+    setExerciseModalVisible(false);
+  }
 
   useEffect(() => {
     const loadSelectedWorkouts = async () => {
@@ -40,7 +44,10 @@ const ExerciseSection = ({ id, dayOfWeek }) => {
         const savedSelectedWorkouts = await AsyncStorage.getItem(`selectedWorkouts_${id}_${dayOfWeek}`);
         if (savedSelectedWorkouts !== null) {
           setSelectedExercises(JSON.parse(savedSelectedWorkouts));
+        }else{
+          setSelectedExercises([]);
         }
+
       } catch (error) {
         console.error('Error loading selected workouts:', error);
       }
@@ -48,56 +55,6 @@ const ExerciseSection = ({ id, dayOfWeek }) => {
 
     loadSelectedWorkouts();
   }, [dayOfWeek]);
-  const ExerciseModal = ({ visible, onSave, onClose }) => {
-    const [selectedExercises, setSelectedExercises] = useState([]);
-    const exercises = [
-      'Bench Press',
-      'Incline Press',
-      'Decline Press',
-      'Tricep Extensions',
-      'Squats',
-      'Deadlifts',
-      'Leg Extensions',
-      'Pull-Ups',
-    ];
-
-    const handleSave = () => {
-      onSave(selectedExercises);
-      onClose();
-    };
-
-    return (
-      <Modal visible={visible} animationType="slide">
-        <View style={styles.modalContainer}>
-        <Text style={styles.title}>Add Exercise</Text>
-          <ScrollView contentContainerStyle={styles.scrollView}>
-            {exercises.map((exercise, index) => (
-              <TouchableOpacity
-                key={index}
-                onPress={() => {
-                  const newSelectedExercises = selectedExercises.includes(exercise)
-                    ? selectedExercises.filter((ex) => ex !== exercise)
-                    : [...selectedExercises, exercise];
-                  setSelectedExercises(newSelectedExercises);
-                  AsyncStorage.setItem(`selectedWorkouts_${id}_${dayOfWeek}`, JSON.stringify(newSelectedExercises));
-                }}
-              >
-                <ListItem bottomDivider containerStyle={[styles.listItem, selectedExercises.includes(exercise) && styles.selectedItem]}>
-                  <ListItem.Content>
-                    <ListItem.Subtitle>{exercise}</ListItem.Subtitle>
-                  </ListItem.Content>
-                </ListItem>
-              </TouchableOpacity>
-            ))}
-          </ScrollView>
-          <View style={styles.buttonContainer}>
-            <Button onPress={onClose} title="Cancel" buttonStyle={{ backgroundColor: 'black' }} color="black" />
-            <Button onPress={handleSave} title="Save" buttonStyle={{ backgroundColor: 'black' }} color="black" />
-          </View>
-        </View>
-      </Modal>
-    );
-  };
   
   return (
     <View style={styles.container}>
@@ -106,8 +63,7 @@ const ExerciseSection = ({ id, dayOfWeek }) => {
           Add Exercise
         </Button>
       </View>
-
-      {/* Render selected exercises as cards */}
+    <ScrollView contentContainerStyle={styles.cardContainerExercise}>
       {selectedExercises.map((exercise, index) => (
         <TouchableOpacity key={index} onPress={() => navigateToSpecifiedExercise(exercise)}>
           <Card style={styles.card}>
@@ -117,23 +73,31 @@ const ExerciseSection = ({ id, dayOfWeek }) => {
           </Card>
         </TouchableOpacity>
       ))}
-
-      <ExerciseModal />
+      </ScrollView>
+        <SpecifiedWorkoutModal id={id} dow={dayOfWeek} visible={exerciseModalVisible} onClose={handleCloseSpecifiedExerciseWorkoutModal} windowHeight={windowHeight} selectedExercise={selectedExercise}/> 
+        <AddExerciseModal id={id} dow={dayOfWeek} visible={addExerciseModalVisible} onClose={handleCloseAddExerciseModal} onSave={handleSaveExercises}/>
     </View>
   );
 };
 
 const windowHeight = Dimensions.get('window').height;
+const windowWidth = Dimensions.get('window').width;
 
 const styles = StyleSheet.create({
   container: {
     // Your container styles
   },
   buttonRow: {
-    // Your button row styles
+    paddingBottom: 10
+  },
+  cardContainerExercise: {
+    alignItems: 'center',
   },
   card: {
-    // Your card styles
+    marginBottom: 8,
+    width: windowWidth * 0.8, // Set card width to 80% of the screen width
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   modalBackground: {
     flex: 1,
@@ -141,7 +105,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end', // Align to the bottom
   },
   modalContainer: {
-    height: windowHeight * 0.8, // Take 80% of the screen's height
+    height: windowHeight * 0.6, // Take 80% of the screen's height
     backgroundColor: 'white',
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
